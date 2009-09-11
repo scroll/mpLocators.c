@@ -17,12 +17,8 @@ class mpLocator : public MPxLocatorNode
 public:
 mpLocator() : MPxLocatorNode() {};
 	virtual ~mpLocator() {};
-	/* virtual void draw( M3dView & view, const MDagPath & path, M3dView::DisplayStyle style, M3dView::DisplayStatus status ); */
 	virtual bool isBounded() const;
 	virtual bool drawLast() const;
-	/* static MStatus initialize(); */
-	/* void initialize(); */
-
 protected:
 	void drawStyle(M3dView::DisplayStyle style,
 		       int drawType, float lw);
@@ -35,7 +31,6 @@ protected:
 	/* static MObject aLineWidth; */
 	/* static MObject aDrawType; */
 	/* static MObject aRotate; */
-    
 };
 
 #endif

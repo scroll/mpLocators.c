@@ -65,15 +65,17 @@ M3dView::DisplayStyle style, M3dView::DisplayStatus status )
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    //draw Infront
 	glDepthFunc(GL_LESS);
     glColor4f( r, g, b, a );
-    
     drawStyle(style, dt, lw);
     drawCube(xsize, ysize, zsize);
+    //draw Behind
     glDepthFunc(GL_GREATER);
     glColor4f( r, g, b, ba );
     drawStyle(style, dt, lw);
     drawCube(xsize, ysize, zsize);
+    
     glPopAttrib();
     glPopMatrix();
     view.endGL();
@@ -124,7 +126,7 @@ MStatus mpBox::initialize()
 	nAttr.setWritable(1);
 	nAttr.setStorable(1);
 	
-	aTransparency = nAttr.create( "transparency", "t", MFnNumericData::kDouble);
+	aTransparency = nAttr.create( "transparency", "t", MFnNumericData::kFloat);
 	nAttr.setDefault(0.5f);
 	nAttr.setKeyable(1);
 	nAttr.setReadable(1);
@@ -133,7 +135,7 @@ MStatus mpBox::initialize()
 	nAttr.setMin(0.0f);
 	nAttr.setMax(1.0f);
 
-	aBackAlpha = nAttr.create( "backAlpha", "ba", MFnNumericData::kDouble);
+	aBackAlpha = nAttr.create( "backAlpha", "ba", MFnNumericData::kFloat);
 	nAttr.setDefault(0.2f);
 	nAttr.setKeyable(1);
 	nAttr.setReadable(1);
@@ -197,7 +199,6 @@ MStatus mpBox::initialize()
 
 void mpBox::drawCube(float xsize, float ysize, float zsize)
 {
-    
     glBegin (GL_QUADS);
     glNormal3f (0.0, 0.0, zsize);
     glVertex3f (-xsize, -ysize, zsize);
