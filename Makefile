@@ -5,7 +5,7 @@ NO_TRANS_LINK =
 
 MAYA_LOCATION = /usr/autodesk/maya2008-x64
 
-PLUGIN = plug.so
+PLUGIN = mpLocators.so
 
 C++ = g++
 
@@ -25,7 +25,7 @@ LIBS = -L$(MAYA_LOCATION)/lib -lOpenMaya -lOpenMayaAnim -lOpenMayaUI
 
 LIBS_GL_EXTRA = -lGL -lGLU
 
-OBJECTS = plug.o \
+OBJECTS = mpLocators.o \
 	mpLocator.o\
 	mpBox.o
 
@@ -56,8 +56,6 @@ OBJECTS = plug.o \
 	$(LD) -o $@ $< $(LIBS)
 
 
-# replace "plug" with the actual name of your plugin.
-# in this example, the source file is "plug.cpp".'
 
 all: $(PLUGIN)
 
@@ -71,7 +69,3 @@ clean:
 Clean:
 	-rm -f *.o *.so *.bak
 
-# this line installs the plugin into the maya directory.
-# you could also just put it in your user maya directory, load it by hand, etc.
-install: plug.so
-	cp plug.so /home/marin.pendjurov/Desktop/plug.so
