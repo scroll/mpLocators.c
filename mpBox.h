@@ -19,13 +19,7 @@ public:
 private:
     void drawCube(float xsize, float ysize, float zsize);
     // Attributes
-    static MObject aColor;
-    static MObject aTransparency;
-    static MObject aBackAlpha;
-    static MObject aLineWidth;
-    static MObject aDrawType;
-    static MObject aRotate;
-
+    _COMMON_ATTR_;
     static MObject aXsize;
     static MObject aYsize;
     static MObject aZsize;
