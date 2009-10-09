@@ -1,4 +1,5 @@
 #include "mpBox.h"
+#include "mpCurvedArrow.h"
 #include <maya/MFnPlugin.h>
 
 // Initialize and UnInitialize the plugin
@@ -16,6 +17,15 @@ MStatus initializePlugin( MObject obj )
 		status.perror("could not register mpBox");
 		return status;
 	}
+    //------------CURVED ARROW LOCATOR-------------//
+	status = plugin.registerNode( mpCurvedArrow::nodeName, mpCurvedArrow::nodeId, 
+						 &mpCurvedArrow::creator, &mpCurvedArrow::initialize,
+						 MPxNode::kLocatorNode );
+	if (!status) {
+		status.perror("could not register mpCurvedArrow");
+		return status;
+	}
+
 	return status;
 }
 
@@ -27,6 +37,11 @@ MStatus uninitializePlugin( MObject obj)
 	status = plugin.deregisterNode( mpBox::nodeId );
 	if (!status) {
 		status.perror("could not deregister mpBox");
+		return status;
+	}
+    status = plugin.deregisterNode( mpCurvedArrow::nodeId );
+	if (!status) {
+		status.perror("could not deregister mpCurvedArrow");
 		return status;
 	}
 

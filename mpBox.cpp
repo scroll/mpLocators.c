@@ -9,36 +9,22 @@ MObject mpBox::aTransparency;
 MObject mpBox::aBackAlpha;
 MObject mpBox::aRotate;
 MObject mpBox::aLineWidth;
-MObject mpBox ::aDrawType;
-
 MObject mpBox::aXsize;
 MObject mpBox::aYsize;
 MObject mpBox::aZsize;
+MObject mpBox ::aDrawType;
 
 void mpBox::draw( M3dView & view, const MDagPath & path,
 M3dView::DisplayStyle style, M3dView::DisplayStatus status )
 {
+    float xsize, ysize, zsize;
     MObject thisNode = thisMObject();
 	float r, g, b, a;
-    float rotx, roty, rotz;
-    float ba, xsize, ysize, zsize;
+    float rotx, roty, rotz, ba;
     int lw, dt;
     MObject color;
     MObject rotate;
-    //lineWidth
-    MPlug lwPlug = MPlug(thisNode, aLineWidth );
-    lwPlug.getValue( lw );
-    //rotate
-    MPlug rPlug = MPlug( thisNode , aRotate);
-    rPlug.getValue( rotate );
-    MFnNumericData rotatedata( rotate ); 
-	rotatedata.getData( rotx, roty, rotz );
-    //transparency
-    MPlug tPlug = MPlug( thisNode, aTransparency );
-    tPlug.getValue( a );
-    //backAlpha
-    MPlug baPlug = MPlug( thisNode, aBackAlpha );
-    baPlug.getValue( ba );
+    _COMMON_ATTR_READ_;
     //zsize
     MPlug xsPlug = MPlug( thisNode, aXsize );
     xsPlug.getValue( xsize );
@@ -51,11 +37,6 @@ M3dView::DisplayStyle style, M3dView::DisplayStatus status )
     //drawType
     MPlug drPlug = MPlug( thisNode, aDrawType );
     drPlug.getValue( dt );
-    //color
-	MPlug cPlug = MPlug( thisNode, aColor );
-    cPlug.getValue( color ); 
-	MFnNumericData colordata( color ); 
-	colordata.getData( r, g, b );
 
     view.beginGL();
     glPushMatrix();
@@ -109,9 +90,8 @@ MStatus mpBox::initialize()
 
 	MFnNumericAttribute nAttr;
 	MFnEnumAttribute enumAttr;
-
-    _COMMON_ATTR_INIT_;
     // add the custom attributes for mpBox  //
+    _COMMON_ATTR_INIT_;
     aXsize = nAttr.create( "xsize", "xsz", MFnNumericData::kFloat);
 	nAttr.setDefault(0.5f);
 	nAttr.setKeyable(1);
@@ -132,10 +112,19 @@ MStatus mpBox::initialize()
 	nAttr.setReadable(1);
 	nAttr.setWritable(1);
 	nAttr.setStorable(1);
+    
+	aDrawType = enumAttr.create( "drawType" , "dt");		
+	enumAttr.addField("wireframe", 0);				
+	enumAttr.addField("shaded", 1);				
+	enumAttr.addField("normal", 2);					
+	enumAttr.setHidden(false);					
+	enumAttr.setKeyable(true);					
+	enumAttr.setDefault(2);						
 
     addAttribute(aXsize);
 	addAttribute(aYsize);
 	addAttribute(aZsize);
+    addAttribute(aDrawType);
 
     return MS::kSuccess;
 }
@@ -179,5 +168,17 @@ void mpBox::drawCube(float xsize, float ysize, float zsize)
     glVertex3f (-xsize, ysize, zsize);
     glVertex3f (-xsize, ysize, -zsize);
     glEnd();
+}
+    
+void mpBox::drawShaded()
+{
+    glEnable (GL_CULL_FACE);
+    glPolygonMode(GL_FRONT, GL_FILL);
+}
+
+void mpBox::drawWireframe(float lw)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glLineWidth(lw);
 }
 

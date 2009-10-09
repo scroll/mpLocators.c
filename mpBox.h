@@ -18,11 +18,14 @@ public:
 
 private:
     void drawCube(float xsize, float ysize, float zsize);
+    void drawShaded();
+    void drawWireframe(float lw);
     // Attributes
-    _COMMON_ATTR_;
     static MObject aXsize;
     static MObject aYsize;
     static MObject aZsize;
+    static MObject aDrawType;
+    _COMMON_ATTR_;
 };
 
 #endif

@@ -26,17 +26,12 @@ void mpLocator::drawStyle(M3dView::DisplayStyle style,
     else
         drawWireframe(lw);
 }
-
     
 void mpLocator::drawShaded()
 {
-    glEnable (GL_CULL_FACE);
-    glPolygonMode(GL_FRONT, GL_FILL);
 }
 
 void mpLocator::drawWireframe(float lw)
 {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glLineWidth(lw);
 }
 

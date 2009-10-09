@@ -27,7 +27,8 @@ LIBS_GL_EXTRA = -lGL -lGLU
 
 OBJECTS = mpLocators.o \
 	mpLocator.o\
-	mpBox.o
+	mpBox.o\
+	mpCurvedArrow.o
 
 # standard stuff: tells the make program how to deal with different file types
 

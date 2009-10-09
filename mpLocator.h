@@ -17,7 +17,6 @@
 	static MObject aTransparency; \
 	static MObject aBackAlpha;    \
 	static MObject aLineWidth;    \
-	static MObject aDrawType;     \
 	static MObject aRotate;
 
 #define _COMMON_ATTR_INIT_				\
@@ -60,20 +59,31 @@
 	nAttr.setStorable(1);						\
 	nAttr.setMin(1.0f);						\
 	nAttr.setMax(10.0f);						\
-	aDrawType = enumAttr.create( "drawType" , "dt");		\
-	enumAttr.addField("wireframe", 0);				\
-	enumAttr.addField("shaded", 1);					\
-	enumAttr.addField("normal", 2);					\
-	enumAttr.setHidden(false);					\
-	enumAttr.setKeyable(true);					\
-	enumAttr.setDefault(2);						\
  	addAttribute(aColor);						\
  	addAttribute(aRotate);						\
 	addAttribute(aTransparency);					\
 	addAttribute(aBackAlpha);					\
 	addAttribute(aLineWidth);					\
-	addAttribute(aDrawType);					\
 	} while (0)
+
+#define _COMMON_ATTR_READ_				\
+	do {						\
+	MPlug lwPlug = MPlug(thisNode, aLineWidth );	\
+	lwPlug.getValue( lw );				\
+	MPlug rPlug = MPlug( thisNode , aRotate);	\
+	rPlug.getValue( rotate );			\
+	MFnNumericData rotatedata( rotate );		\
+	rotatedata.getData( rotx, roty, rotz );		\
+	MPlug tPlug = MPlug( thisNode, aTransparency );	\
+	tPlug.getValue( a );				\
+	MPlug baPlug = MPlug( thisNode, aBackAlpha );	\
+	baPlug.getValue( ba );				\
+	MPlug cPlug = MPlug( thisNode, aColor );	\
+	cPlug.getValue( color );			\
+	MFnNumericData colordata( color );		\
+	colordata.getData( r, g, b );			\
+	} while (0)
+
 									
 class mpLocator : public MPxLocatorNode
 {
@@ -85,8 +95,8 @@ mpLocator() : MPxLocatorNode() {};
 protected:
 	void drawStyle(M3dView::DisplayStyle style,
 		       int drawType, float lw);
-	void drawShaded();
-	void drawWireframe(float lw);
+	virtual void drawShaded();
+	virtual void drawWireframe(float lw);
 };
 
 #endif
